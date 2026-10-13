@@ -48,7 +48,7 @@ class ClientRepository:
                 res = session.execute(stmt)
                 
                 #obtener cliente
-                client = res.first()
+                client = res.first().tuple()[0]
                 
                 #validar resultado
                 if not client:
