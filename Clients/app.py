@@ -24,7 +24,18 @@ repo = ClientRepository()
 #log de inicio
 logger.info("app started!!!")
 
-#metodo raiz
+#manejadores de error
+@app.errorhandler(404)
+def not_found(error):
+    #retornar respuesta
+    return jsonify({"detail":"not found"}), 404
+
+@app.errorhandler(Exception)
+def internal_error(e):
+    #retornar mensaje
+    return jsonify({"detail":str(e)}), 500
+
+#metodos rest
 @app.get("/")
 def root():
     #obtener parametro query
@@ -38,7 +49,14 @@ def root():
 @app.get("/<id>")
 def info(id:int):
     #obtener cliente
-    return jsonify(repo.get_client(id)), 200
+    client = repo.get_client(id)
+    
+    #verificar estado
+    if not client:
+        return jsonify({"detail":"client not found"}), 404
+    
+    #retornar cliente
+    return jsonify(client), 200
 
 @app.post("/")
 def create():
@@ -47,6 +65,10 @@ def create():
     
     #ejecutar operacion
     id = repo.create_client(data)
+    
+    #verificar creacion
+    if not id:
+        return jsonify({"detail":"client not created"}), 500
     
     #retornar respuesta
     return jsonify({"msg":"client created!!!","id":id}), 200
@@ -59,6 +81,10 @@ def update(id:int):
     #ejecutar operacion
     res = repo.update_client(id,data)
     
+    #validar actualziacion
+    if not res:
+        return jsonify({"detail":"client not updated"}), 500
+    
     #obtener cliente
     return jsonify({"id": id, "updated":res}), 200
 
@@ -66,6 +92,10 @@ def update(id:int):
 def delete(id:int):
     #ejecutar operacion
     res = repo.delete_client(id)
+    
+    #validar eliminacion
+    if not res:
+        return jsonify({"detail":"client not deleted"}), 500
     
     #obtener cliente
     return jsonify({"id": id, "deleted":res}), 200
