@@ -13,7 +13,7 @@ Base = declarative_base()
 #modelo de tabla
 class Client(Base):
     #nombre de tabla sql
-    __tablename__ = "cliente"
+    __tablename__ = "clientes"
     
     #campos
     id = Column(
@@ -23,9 +23,12 @@ class Client(Base):
     )
     name = Column(
         String(100),
-        name="nombre"
+        name="nombre_cliente"
     )
-    email = Column(String(100))
+    email = Column(
+        String(100),
+        name="email_cliente"
+    )
 
 #url de conexion
 CONURL = (
