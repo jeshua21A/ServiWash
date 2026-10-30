@@ -217,5 +217,18 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-#virtual environments
+# Virtual environments
 Clients/.api_env/
+.venv
+
+# Environment variables
+.env
+
+# Config files
+config.py
+
+# Ignore __pycache__
+__pycache__
+
+# Ignore .vscode
+.vscode
