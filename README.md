@@ -30,9 +30,9 @@ python run.py
 
 ## Instalar las dependencias
 
-Comando para instalar requirements.txt
+Comando para instalar requirements.txt.
 ```
-pip install -r requirements.txt.
+pip install -r requirements.txt
 ```
 
 ## Archivo de variables de entorno
