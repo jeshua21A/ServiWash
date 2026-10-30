@@ -22,7 +22,7 @@ deactivate
 
 **Aviso: Solo se ejecuta "run.py" cuando se tengan los archivos ".env" y "config.py" creados**
 
-Comando para ejecutar run.py
+Comando para ejecutar run.py.
 
 ```
 python run.py
