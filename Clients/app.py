@@ -40,9 +40,10 @@ def internal_error(e):
 def root():
     #obtener parametro query
     page = request.args.get('page',0,int)
+    per_page = request.args.get('per_page',10,int)
     
     #obtener clientes
-    clients = repo.get_clients(page)
+    clients = repo.get_clients(page,per_page)
     
     return jsonify(clients), 200
 
@@ -86,7 +87,7 @@ def update(id:int):
         return jsonify({"detail":"client not updated"}), 500
     
     #obtener cliente
-    return jsonify({"id": id, "updated":res}), 200
+    return jsonify({"id": id, "msg": "client updated!!!"}), 200
 
 @app.delete("/<id>")
 def delete(id:int):
@@ -98,4 +99,4 @@ def delete(id:int):
         return jsonify({"detail":"client not deleted"}), 500
     
     #obtener cliente
-    return jsonify({"id": id, "deleted":res}), 200
+    return jsonify({"id": id, "msg": "client deleted!!!"}), 200
