@@ -8,7 +8,7 @@ logger = logging.getLogger(__file__)
 #repositorio de cliente
 class ClientRepository:
     #operaciones
-    def get_clients(self, page:int = 0, per_page:int = 10)->list:
+    def get_clients(self, page:int, per_page:int)->list:
         #contenedores
         clients = []
         
@@ -66,6 +66,10 @@ class ClientRepository:
         #contenedor
         id = None
         
+        #eliminar falso id
+        if "id" in data.keys():
+            data.pop("id")
+        
         #manejo de error
         try:
             #obtener la sesion
@@ -87,6 +91,10 @@ class ClientRepository:
         return id
     
     def update_client(self, id:int, data:dict)->bool:
+        #eliminar falso id
+        if "id" in data.keys():
+            data.pop("id")
+        
         #manejo de error
         try:
             #obtener la sesion
