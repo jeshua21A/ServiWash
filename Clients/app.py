@@ -2,6 +2,7 @@ import logging
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from repository import ClientRepository
+from auth import get_token
 
 #configuracion de logger
 logging.basicConfig(
@@ -35,6 +36,15 @@ def internal_error(e):
     #retornar mensaje
     return jsonify({"detail":str(e)}), 500
 
+@app.before_request
+def middleware():
+    #obtener token
+    tk = get_token()
+    
+    #validar header de token
+    if not tk:
+        return jsonify({"msg":"not allowed"}), 401
+    
 #metodos rest
 @app.get("/")
 def root():
