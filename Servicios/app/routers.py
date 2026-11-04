@@ -39,7 +39,7 @@ def create_servicio():
     
     except (ValueError, KeyError) as ex:
         db.rollback()
-        return jsonify({"error:", f"Datos de entrada inválidos: {str(ex)}"}), 400
+        return jsonify({"error:": f"Datos de entrada inválidos: {str(ex)}"}), 400
 
 @servicios_bp.route('/<int:id>', methods=['PUT'])
 def update_servicio(id):
@@ -61,7 +61,7 @@ def update_servicio(id):
         return jsonify(servicio.to_dict()), 200
     except ValueError as ex:
         db.rollback()
-        return jsonify({"error", f"Valor ENUM inválido: {str(ex)} "}), 400
+        return jsonify({"error": f"Valor ENUM inválido: {str(ex)} "}), 400
 
 # 2. MICROSERVICIO DE CÁLCULO Y COTIZACIÓN
 
@@ -107,9 +107,7 @@ def cotizar_por_kilo():
 
         return jsonify({
             "servicio_id": servicio_id,
-            "metrica_cobro": "PAGO_POR_KILO",
             "cantidad_procesada": cantidad_kilos,
-            "costo_referencia": costo_referencia,
             "es_express": forzar_express,
             "subtotal_calculado": round(subtotal, 2)
         }), 200
@@ -156,10 +154,8 @@ def cotizar_por_uso():
 
         return jsonify({
             "servicio_id": servicio_id,
-            "metrica_cobro": "PAGO_POR_USO",
             "minutos_totales": round(duracion_minutos, 2),
             "numero_ciclos": numero_ciclos,
-            "costo_referencia": costo_referencia,
             "es_express": forzar_express,
             "subtotal_calculado": round(subtotal, 2)
         }), 200
@@ -175,7 +171,7 @@ def cotizar_por_prendas_especiales():
     
     try:
         servicio_id = data.get('servicio_id')
-        cantidad_prendas = float(data.get('cantidad_prendas_especiales', 0.0))
+        cantidad_prendas = int(data.get('cantidad_prendas_especiales', 0.0))
         forzar_express = data.get('express', False) # Opcional: forzar express desde el cliente
 
         if not servicio_id:
@@ -194,9 +190,7 @@ def cotizar_por_prendas_especiales():
 
         return jsonify({
             "servicio_id": servicio_id,
-            "metrica_cobro": "PAGO_POR_PRENDA_ESPECIAL",
             "cantidad_piezas": cantidad_prendas,
-            "costo_referencia": costo_referencia,
             "es_express": forzar_express,
             "subtotal_calculado": round(subtotal, 2)
         }), 200
