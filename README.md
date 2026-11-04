@@ -202,7 +202,7 @@ Registra una nueva máquina en el sistema utilizando los datos JSON provistos.
 }
 ```
 
-**400 Bad Request (JSON)**
+**400 Bad Request (JSON):**
 ```bash
 {
   "error": "Datos de entrada inválidos: 'tipo_maquina'"
@@ -245,7 +245,7 @@ Modifica de forma parcial únicamente el estado operativo de una máquina espec�
 }
 ```
 
-**400 Bad Request (JSON)**
+**400 Bad Request (JSON):**
 - Mensaje 1 (Valor no permitido en el Enum):
     ```bash
     {
@@ -259,7 +259,7 @@ Modifica de forma parcial únicamente el estado operativo de una máquina espec�
     }
     ```
 
-**404 Not Found (JSON)**
+**404 Not Found (JSON):**
 ```bash
 {
     "error": "Máquina no encontrada"
@@ -302,7 +302,7 @@ Permite cambiar el tipo de un equipo ya registrado (por ejemplo, de secadora a l
 }
 ```
 
-**400 Bad Request (JSON)**
+**400 Bad Request (JSON):**
 - Mensaje 1 (Valor no permitido en el Enum):
     ```bash
     {
@@ -316,7 +316,7 @@ Permite cambiar el tipo de un equipo ya registrado (por ejemplo, de secadora a l
     }
     ```
 
-**404 Not Found (JSON)**
+**404 Not Found (JSON):**
 ```bash
 {
     "error": "Máquina no encontrada"
@@ -348,7 +348,7 @@ No lleva Request Body (JSON)
 }
 ```
 
-**404 Not Found (JSON)**
+**404 Not Found (JSON):**
 ```bash
 {
     "error": "Máquina no encontrada"
@@ -427,7 +427,7 @@ No lleva Request Body (JSON)
 }
 ```
 
-**404 Not Found (JSON)**
+**404 Not Found (JSON):**
 ```bash
 {
     "error": "Servicio no encontrado"
@@ -472,7 +472,7 @@ Da de alta un nuevo tipo de servicio de lavandería en el sistema.
 }
 ```
 
-**400 Bad Request (JSON)**
+**400 Bad Request (JSON):**
 ```bash
 {
     "error:": "Datos de entrada inválidos: 'SERVICIO_ESPECIAL' is not a valid TipoServicioEnum"
@@ -518,7 +518,7 @@ Calcula el subtotal del servicio basándose en la cantidad de kilos procesados, 
 }
 ```
 
-**400 Bad Request (JSON)**
+**400 Bad Request (JSON):**
 - Mensaje 1 (campo 'servicio_id' requerido):
     ```bash
     {
@@ -532,7 +532,7 @@ Calcula el subtotal del servicio basándose en la cantidad de kilos procesados, 
     }
     ```
 
-**404 Not Found (JSON)**
+**404 Not Found (JSON):**
 ```bash
 {
     "error": "El servicio especificado no existe en la base de datos"
@@ -581,7 +581,7 @@ Calcula el subtotal basándose en el tiempo transcurrido entre t_inicio y t_fina
 }
 ```
 
-**400 Bad Request (JSON)**
+**400 Bad Request (JSON):**
 - Mensaje 1 (campo 'servicio_id' requerido):
     ```bash
     {
@@ -601,7 +601,7 @@ Calcula el subtotal basándose en el tiempo transcurrido entre t_inicio y t_fina
     }
     ```
 
-**404 Not Found (JSON)**
+**404 Not Found (JSON):**
 ```bash
 {
     "error": "El servicio especificado no existe en la base de datos"
@@ -647,7 +647,7 @@ Calcula el subtotal multiplicando la cantidad de piezas o prendas especiales por
 }
 ```
 
-**400 Bad Request (JSON)**
+**400 Bad Request (JSON):**
 - Mensaje 1 (campo 'servicio_id' requerido):
     ```bash
     {
@@ -661,7 +661,7 @@ Calcula el subtotal multiplicando la cantidad de piezas o prendas especiales por
     }
     ```
 
-**404 Not Found (JSON)**
+**404 Not Found (JSON):**
 ```bash
 {
     "error": "El servicio especificado no existe en la base de datos"
@@ -706,14 +706,14 @@ Actualiza los datos de un servicio existente utilizando su ID.
 }
 ```
 
-**400 Bad Request (JSON)**
+**400 Bad Request (JSON):**
 ```bash
 {
     "error": "Valor ENUM inválido: '' is not a valid TipoServicioEnum "
 }
 ```
 
-**404 Not Found (JSON)**
+**404 Not Found (JSON):**
 ```bash
 {
   "error": "Servicio no encontrado"
@@ -745,7 +745,7 @@ No lleva Request Body (JSON)
 }
 ```
 
-**404 Not Found (JSON)**
+**404 Not Found (JSON):**
 ```bash
 {
     "error": "Servicio no encontrado"
