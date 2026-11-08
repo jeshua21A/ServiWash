@@ -1,7 +1,9 @@
 Flask
 flask-cors
+flask-websockets
 sqlalchemy
 mysql-connector-python
 python-dotenv
 PyJWT
 bcrypt
+requests

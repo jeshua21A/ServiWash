@@ -1,5 +1,5 @@
 import logging
-from database import Client, get_session
+from .database import Client, get_session
 from sqlalchemy import select, update, delete
 
 #logger de repositorio

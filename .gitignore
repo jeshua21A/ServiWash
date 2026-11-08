@@ -224,9 +224,6 @@ Clients/.api_env/
 # Environment variables
 .env
 
-# Config files
-config.py
-
 # Ignore __pycache__
 __pycache__
 

@@ -1,52 +1,15 @@
-import logging
-from flask import Flask, jsonify, request
+from flask import Blueprint, jsonify, request
 from flask_cors import CORS
-from repository import ClientRepository
-from auth import get_token
+from .data import ClientRepository
 
-#configuracion de logger
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%d/%m/%Y - %H:%M:%S"
-)
-
-logger = logging.getLogger(__name__)
-
-#app principal de flask
-app = Flask(__name__)
-
-#añadir cors
-CORS(app)
+#blueprint de cliente
+bp = Blueprint("clients",__file__)
 
 #repositorio de clientes
 repo = ClientRepository()
-
-#log de inicio
-logger.info("app started!!!")
-
-#manejadores de error
-@app.errorhandler(404)
-def not_found(error):
-    #retornar respuesta
-    return jsonify({"detail":"not found"}), 404
-
-@app.errorhandler(Exception)
-def internal_error(e):
-    #retornar mensaje
-    return jsonify({"detail":str(e)}), 500
-
-@app.before_request
-def middleware():
-    #obtener token
-    tk = get_token()
-    
-    #validar header de token
-    if not tk:
-        return jsonify({"msg":"not allowed"}), 401
     
 #metodos rest
-@app.get("/")
+@bp.get("/")
 def root():
     #obtener parametro query
     page = request.args.get('page',0,int)
@@ -57,7 +20,7 @@ def root():
     
     return jsonify(clients), 200
 
-@app.get("/<id>")
+@bp.get("/<id>")
 def info(id:int):
     #obtener cliente
     client = repo.get_client(id)
@@ -69,7 +32,7 @@ def info(id:int):
     #retornar cliente
     return jsonify(client), 200
 
-@app.post("/")
+@bp.post("/")
 def create():
     #obtener datos
     data = request.get_json()
@@ -84,7 +47,7 @@ def create():
     #retornar respuesta
     return jsonify({"msg":"client created!!!","id":id}), 200
 
-@app.put("/<id>")
+@bp.put("/<id>")
 def update(id:int):
     #obtener los datos
     data = request.get_json()
@@ -99,7 +62,7 @@ def update(id:int):
     #obtener cliente
     return jsonify({"id": id, "msg": "client updated!!!"}), 200
 
-@app.delete("/<id>")
+@bp.delete("/<id>")
 def delete(id:int):
     #ejecutar operacion
     res = repo.delete_client(id)
