@@ -224,11 +224,11 @@ Clients/.api_env/
 # Environment variables
 .env
 
-# Config files
-config.py
-
 # Ignore __pycache__
 __pycache__
 
 # Ignore .vscode
 .vscode
+
+# Ignore .DS_Store
+.DS_Store
