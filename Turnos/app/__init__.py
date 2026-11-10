@@ -5,6 +5,7 @@ from flask_cors import CORS
 from flask_websockets import WebSockets, WebSocket
 import requests
 from .sockets import SocketManager, TurnDispatcher
+from .routes import bp
 
 #configuracion de logger
 logging.basicConfig(
@@ -76,6 +77,7 @@ def create_app()->Flask:
     CORS(app)
     websockets.init_app(app)
     
-    #TODO: registrar rutas REST
+    #añadir empoint rest
+    app.register_blueprint(bp)
     
     return app

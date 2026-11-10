@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify, request
-from flask_cors import CORS
 from .data import ClientRepository
 
 #blueprint de cliente
