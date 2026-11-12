@@ -16,29 +16,20 @@ class User(Base):
     __tablename__ = "Usuarios"
 
     #campos
-    id = Column(
-        Integer,
-        primary_key=True,
-        autoincrement=True
-    )
-    nombre_usuario = Column(
-        String(100),
-        unique=True,
-        nullable=False
-    )
-    password_hash = Column(
-        String(100),
-        nullable=False
-    )
-    rol = Column(
-        String(20),
-        nullable=False
-    )
-    esta_activo = Column(
-        Boolean,
-        nullable=False,
-        default=True
-    )
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nombre_usuario = Column(String(100), unique=True, nullable=False)
+    password_hash = Column(String(100), nullable=False)
+    rol = Column(String(20), nullable=False)
+    esta_activo = Column(Boolean, nullable=False, default=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre_usuario": self.nombre_usuario,
+            "password_hash": self.password_hash,
+            "rol": self.rol,
+            "esta_activo": self.esta_activo
+        }
 
 #datos de conexion desde .env
 DBUSER = os.environ.get("DBUSER")

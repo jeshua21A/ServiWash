@@ -5,7 +5,6 @@ import bcrypt
 import jwt
 from flask import request
 from dotenv import load_dotenv
-import uuid
 
 #cargar variables de entorno
 load_dotenv()
@@ -14,14 +13,8 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 #configuracion de seguridad
-SECRET = os.environ.get("JWT_SECRET")
-INACTIVITY_MINUTES = 50
-
-#limite maximo de sesion, aunque haya actividad
-MAX_SESSION_HOURS = 12
-
-#ultima actividad de cada token
-last_activity = {}
+SECRET = os.environ.get("SECRET_KEY")
+SESSION_MINUTES = 60
 
 #funciones de seguridad
 def hash_password(password:str)->str:
@@ -33,18 +26,13 @@ def check_password(password:str, password_hash:str)->bool:
     return bcrypt.checkpw(password.encode(), password_hash.encode())
 
 def create_token(user:dict)->str:
-    #id unico del token
-    jti = str(uuid.uuid4())
-    
-    #registrar actividad inicial
-    last_activity[jti] = datetime.now(timezone.utc)
-    
+
     #datos del token
     payload = {
         "sub": str(user["id"]),
         "rol": user["rol"],
-        "jti": jti,
-        "exp": datetime.now(timezone.utc) + timedelta(hours=MAX_SESSION_HOURS)
+        "iat": datetime.now(timezone.utc),
+        "exp": datetime.now(timezone.utc) + timedelta(minutes=SESSION_MINUTES)
     }
     
     #firmar token
@@ -63,20 +51,13 @@ def get_token()->str|None:
 def decode_token(token:str)->dict|None:
     #validar firma y expiracion
     try:
+        # PyJWT valida automaticamente la firma y el 'exp' (expiración)
         payload = jwt.decode(token, SECRET, algorithms=["HS256"])
+        return payload
+    except jwt.ExpiredSignatureError:
+        logger.warning("Intento de acceso con toekn expirado.")
+        return None
     except jwt.InvalidTokenError as e:
         #log de error
-        logger.warning(e)
+        logger.warning(f"Token inválido: {e}")
         return None
-    
-    #validar inactividad
-    now = datetime.now(timezone.utc)
-    last = last_activity.get(payload["jti"])
-    
-    if not last or now - last > timedelta(minutes=INACTIVITY_MINUTES):
-        last_activity.pop(payload["jti"], None)
-        return None
-    
-    #hubo actividad: reiniciar el contador
-    last_activity[payload["jti"]] = now
-    return payload

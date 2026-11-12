@@ -5,11 +5,11 @@ from app import db
 from app.models import TipoServicioEnum, MetricaCobroEnum, Servicio
 
 # Creación del Blueprint para modularizar las rutas del servicio de lavandería
-servicios_bp = Blueprint('servicios_bp', __name__, url_prefix='/api/v1/servicios')
+servicios_bp = Blueprint('servicios_bp', __name__)
 
 # ENDPOINTS CRUD (Gestión del Catálogo)
 
-@servicios_bp.route('', methods=['GET'])
+@servicios_bp.route('/', methods=['GET'])
 def get_servicios():
     """Obtiene y lista todos los servicios registrados en el catálogo de la base de datos."""
     servicios = db.query(Servicio).all()
@@ -23,7 +23,7 @@ def get_servicio(id):
         return jsonify({"error": "Servicio no encontrado"}), 404
     return jsonify(servicio.to_dict()), 200
 
-@servicios_bp.route('', methods=['POST'])
+@servicios_bp.route('/', methods=['POST'])
 def create_servicio():
     """Registra un nuevo servicio en el catálogo validando sus enums y datos obligatorios."""
     data = request.get_json()
