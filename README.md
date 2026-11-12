@@ -3,20 +3,20 @@
 ## Entorno Virtual (.venv)
 
 Comando para crear el entorno virtual.
-```
+```bash
 python -m venv .venv
 ```
 Comando para activar el entorno virtual.
 - En Windows:
-    ```
+    ```bash
     .venv\Scripts\activate
     ```
 - En Mac o Linux:
-    ```
+    ```bash
     source .venv/bin/activate
     ```
 Comando para desactivar el entorno virtual.
-```
+```bash
 deactivate
 ```
 
@@ -24,14 +24,14 @@ deactivate
 
 Comando para ejecutar run.py.
 
-```
+```bash
 python run.py
 ```
 
 ## Instalar las dependencias
 
 Comando para instalar requirements.txt.
-```
+```bash
 pip install -r requirements.txt
 ```
 
@@ -41,7 +41,7 @@ Estructura del archivo (.env) para usar variables de entorno y conectar la base 
 
 **Crear el archivo .env dentro del directorio de la API.**
 
-```
+```bash
 SECRET_KEY=
 DB_USER=root
 DB_PASSWORD=
@@ -51,8 +51,19 @@ DB_NAME=serviwash
 ```
 
 Comando para generar la SECRET_KEY.
-```
+```bash
 python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+Estructura del archivo (.env) para usar variables de entorno dentro de la API Gateway.
+
+```bash
+SECRET_KEY=
+USERS_URL=http://127.0.0.1:5003
+CLIENTS_URL=http://127.0.0.1:5001
+MACHINES_URL=http://127.0.0.1:5004
+SERVICES_URL=http://127.0.0.1:5005
+TURNS_URL=http://127.0.0.1:5002
 ```
 
 ## Archivo de configuración de python para usar las variables de entorno
@@ -61,7 +72,7 @@ Estructura del archivo (config.py) para usar variables de entorno dentro de los 
 
 **Crear el archivo config.py dentro del directorio de la API**
 
-```
+```bash
 import os
 from dotenv import load_dotenv
 
