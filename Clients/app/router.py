@@ -36,6 +36,11 @@ def create():
     #obtener datos
     data = request.get_json()
     
+    #validar si ya existe
+    prev = repo.get_client(name=data["name"])
+    if prev:
+        return jsonify({"msg":"client already exists!!!","id":prev["id"]}), 200
+    
     #ejecutar operacion
     id = repo.create_client(data)
     

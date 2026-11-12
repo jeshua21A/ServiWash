@@ -33,7 +33,7 @@ class ClientRepository:
                
         return clients
     
-    def get_client(self, id:int)->dict|None:
+    def get_client(self, id:int=0, name:str="")->dict|None:
         #contenedor
         client = None
         
@@ -42,7 +42,7 @@ class ClientRepository:
             #obtener la sesion
             with get_session() as session:
                 #preparar sentencia
-                stmt = select(Client).where(Client.id == id)
+                stmt = select(Client).where((Client.id == id or Client.name == name))
                 
                 #ejecutar sentencia
                 res = session.execute(stmt)
