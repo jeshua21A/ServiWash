@@ -1,6 +1,8 @@
+from datetime import datetime
 from typing import TypedDict, List
 import requests
 from .manager import SocketManager
+from ..data import TurnRepository
 
 class Machine(TypedDict):
     #campos
@@ -13,7 +15,8 @@ class Machine(TypedDict):
 #despachador de turnos
 class TurnDispatcher:
     #constructor
-    def __init__(self, manager:SocketManager):
+    def __init__(self, manager:SocketManager, repo:TurnRepository):
+        self.repo = repo
         self.manager = manager
         self.machines:List[Machine] = requests.get(
             "http://localhost:8000/api/v1/maquinas"
@@ -36,7 +39,8 @@ class TurnDispatcher:
             "emiter_id": 0,
             "emiter_type": "server",
             "payload": {
-                "turn": self.counter
+                "turn": self.counter,
+                "client_id": id
             }
         })
         
@@ -57,13 +61,22 @@ class TurnDispatcher:
         if not first_free:
             return
             
+        #validar cola (cola vacia)
+        if not len(self.queue):
+            return
+        
         #obtenemos el primer cliente de la cola
         first = self.queue.pop(0)
         
         #asignamos el recurso
         self.asigns[first_free] = first
         
-        #TODO: registrar turno en bd aqui
+        #registrar turno en bd aqui
+        stored_id = self.repo.create_turn({
+            "start_hour": datetime.now(),
+            "machine_id": first_free,
+            "client_id": first
+        })
         
         #notificar evento
         self.manager.notifyEvent({
@@ -72,15 +85,19 @@ class TurnDispatcher:
             "emiter_type": "server",
             "payload": {
                 "client": first,
-                "machine": first_free
+                "machine": first_free,
+                "stored_id": stored_id
             }
         })
         
-    def release_client(self, machine:int):
+    def release_client(self, machine:int, stored_id:int):
         #eliminar la asociacion
         self.asigns[machine] = ""
         
-        #TODO: cerrar turno en bd aqui
+        #cerrar turno en bd
+        self.repo.update_turn(stored_id,{
+            "close_hour": datetime.now()
+        })
         
         #notificar al cliente
         self.manager.notifyEvent({

@@ -33,6 +33,8 @@ class TurnRepository:
                 #obtener turnoss
                 turn = row.tuple()[0]
                 turn = turn.__dict__.copy()
+                turn["start_hour"] = turn["start_hour"].strftime("%d/%m/%Y HH:MM:SS")
+                turn["close_hour"] = turn["close_hour"] and turn["close_hour"].strftime("%d/%m/%Y HH:MM:SS")
                 turn.pop('_sa_instance_state')
                 
                 #añadir diccionario
@@ -62,6 +64,8 @@ class TurnRepository:
                     raise Exception(f"turn {id} not found")
                 
                 turn = turn.__dict__.copy()
+                turn["start_hour"] = turn["start_hour"].strftime("%d/%m/%Y HH:MM:SS")
+                turn["close_hour"] = turn["close_hour"] and turn["close_hour"].strftime("%d/%m/%Y HH:MM:SS")
                 turn.pop('_sa_instance_state')
         except Exception as e:
             #log de error
