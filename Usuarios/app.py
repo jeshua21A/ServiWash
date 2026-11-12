@@ -1,11 +1,13 @@
 import logging
+from datetime import datetime, timezone, timedelta
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from repository import UserRepository
 from auth import (
-    INACTIVITY_MINUTES, hash_password, check_password,
+    hash_password, check_password,
     create_token, get_token, decode_token
 )
+from database import engine, Base
  
 #configuracion de logger
 logging.basicConfig(
@@ -95,15 +97,22 @@ def login():
     #buscar usuario
     user = repo.get_user_by_name(nombre_usuario)
     
-    #validar credenciales y que el usuario este activo
-    if not user or not user["esta_activo"] or not check_password(password, user["password_hash"]):
-        return jsonify({"detail":"invalid credentials"}), 401
+    # Validar que el usuario exista y la contraseña sea correcta
+    if not user or not check_password(password, user["password_hash"]):
+        return jsonify({"detail": "Credenciales inválidas"}), 401
+
+    # Comprobar si la cuenta está activa
+    if not user["esta_activo"] :
+        return jsonify({"detail": "La cuenta está inactiva"}), 401
+
+    # Calcular expiración en formato string ISO (evita el error de JSON)
+    expiration_time = datetime.now(timezone.utc) + timedelta(hours=12)
     
     #retornar token
     return jsonify({
         "token": create_token(user),
         "rol": user["rol"],
-        "expires_in": INACTIVITY_MINUTES * 60
+        "expires_in": expiration_time.isoformat()
     }), 200
  
 @app.post("/verify")
@@ -129,8 +138,18 @@ def refresh():
     
     #generar uno nuevo, reinicia los 50 min
     user = {"id": payload["sub"], "rol": payload["rol"]}
+
+    # Calcular expiración en formato string ISO (evita el error de JSON)
+    expiration_time = datetime.now(timezone.utc) + timedelta(hours=12)
     
     return jsonify({
         "token": create_token(user),
-        "expires_in": INACTIVITY_MINUTES * 60
+        "expires_in": expiration_time.isoformat()
     }), 200
+
+if __name__ == '__main__':
+
+    Base.metadata.create_all(engine)
+    logger.info("¡Tablas verificadas/creadas exitosamente en MySQL!")
+    
+    app.run(debug=True, host='0.0.0.0', port=5003)

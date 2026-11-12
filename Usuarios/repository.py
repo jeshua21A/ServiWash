@@ -8,6 +8,11 @@ logger = logging.getLogger(__file__)
 #repositorio de usuario
 class UserRepository:
     #operaciones
+    def count_users(self) -> int:
+        """Retorna el número total de usuarios registrados en la base de datos."""
+        with get_session() as session:
+            return session.query(User).count()
+            
     def get_user_by_name(self, nombre_usuario:str)->dict|None:
         #contenedor
         user = None

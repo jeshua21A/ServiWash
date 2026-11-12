@@ -3,9 +3,9 @@ from app import db
 from app.models import Maquina, TipoMaquinaEnum, EstadoMaquinaEnum
 
 # Creación del Blueprint para el módulo de máquinas con su prefijo base
-maquinas_bp = Blueprint('maquinas_bp', __name__, url_prefix='/api/v1/maquinas')
+maquinas_bp = Blueprint('maquinas_bp', __name__)
 
-@maquinas_bp.route('', methods=['GET'])
+@maquinas_bp.route('/', methods=['GET'])
 def get_maquinas():
     """
     Obtiene la lista de todas las máquinas registradas.
@@ -29,7 +29,7 @@ def get_maquina(id):
         return jsonify({"error": "Máquina no encontrada"}), 404
     return jsonify(maquina.to_dict()), 200
 
-@maquinas_bp.route('', methods=['POST'])
+@maquinas_bp.route('/', methods=['POST'])
 def create_maquina():
     """Registra una nueva máquina en el sistema utilizando los datos JSON provistos."""
     data = request.get_json()
