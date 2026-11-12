@@ -18,20 +18,26 @@ class TurnDispatcher:
     def __init__(self, manager:SocketManager, repo:TurnRepository):
         self.repo = repo
         self.manager = manager
-        self.machines:List[Machine] = requests.get(
-            "http://localhost:8000/api/v1/maquinas"
+        self.washing_machines:List[Machine] = requests.get(
+            "http://localhost:8000/api/v1/maquinas?tipo_maquina=LAVADORA"
         ).json()
-        self.asigns = { machine["id"]:"" for machine in self.machines }
+        self.dryer_machines:List[Machine] = requests.get(
+            "http://localhost:8000/api/v1/maquinas?tipo_maquina=SECADORA"
+        ).json()
+        self.wash_asigns = { machine["id"]:"" for machine in self.washing_machines }
+        self.dryer_asigns = { machine["id"]:"" for machine in self.dryer_machines }
         self.counter = 0
-        self.queue = []
+        self.wash_queue = []
+        self.dray_queue = []
     
     #metodos de dispatcher
-    def queue_client(self, id:int)->None:
+    def queue_client(self, id:int, machine_type:str)->None:
         #aumentar el contador de turnos
         self.counter += 1
         
         #añadir cliente a la cola
-        self.queue.append(id)
+        queue = self.dryer_asigns if machine_type == "SECADORA" else self.wash_queue
+        queue.append(id)
         
         #notificar al cliente
         self.manager.notifyEvent({
@@ -45,13 +51,24 @@ class TurnDispatcher:
         })
         
         #ver si se le puede asignar un recurso
-        self.__asign_source()
+        self.__asign_source(machine_type)
         
     #metodo asignador
-    def __asign_source(self):
+    def __asign_source(self, machine_type:str):
+        #contenedores
+        asigns = {}
+        
+        #seleccionar asignaciones segun el tipo
+        if machine_type == "LAVADORA":
+            #seleccionar lavadoras
+            asigns = self.wash_asigns
+        else:
+            #seleccionar 
+            asigns = self.dryer_asigns
+        
         #obtener el primer recurso libre
         first_free = ""
-        for id, asign in self.asigns.items():
+        for id, asign in asigns.items():
             #verificar si no tiene asignado un cliente
             if not asign:
                 first_free = id
@@ -60,16 +77,19 @@ class TurnDispatcher:
         #validar disponibilidad
         if not first_free:
             return
+        
+        #decidir la cola
+        queue = self.dryer_asigns if machine_type == "SECADORA" else self.wash_queue
             
         #validar cola (cola vacia)
-        if not len(self.queue):
+        if not len(queue):
             return
         
         #obtenemos el primer cliente de la cola
-        first = self.queue.pop(0)
+        first = queue.pop(0)
         
         #asignamos el recurso
-        self.asigns[first_free] = first
+        asigns[first_free] = first
         
         #registrar turno en bd aqui
         stored_id = self.repo.create_turn({
@@ -90,9 +110,20 @@ class TurnDispatcher:
             }
         })
         
-    def release_client(self, machine:int, stored_id:int):
+    def release_client(self, machine:int, stored_id:int, machine_type:str):
+        #seleccionar asigns
+        asigns = {}
+        
+        #seleccionar asignaciones segun el tipo
+        if machine_type == "LAVADORA":
+            #seleccionar lavadoras
+            asigns = self.wash_asigns
+        else:
+            #seleccionar 
+            asigns = self.dryer_asigns
+        
         #eliminar la asociacion
-        self.asigns[machine] = ""
+        asigns[machine] = ""
         
         #cerrar turno en bd
         self.repo.update_turn(stored_id,{
@@ -110,4 +141,4 @@ class TurnDispatcher:
         })
         
         #asignar recurso liberado
-        self.__asign_source()
+        self.__asign_source(machine_type)

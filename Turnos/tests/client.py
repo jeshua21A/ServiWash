@@ -6,6 +6,7 @@ from websockets.sync.client import connect
 #variables
 CLIENT_NAME = "Prueba"
 SERVER_URL = "ws://localhost:5002/ws"
+MACHINE_TYPE = "LAVADORA"
 CLIENT_ID = 0
 TRANSACTION_ID = 0
 
@@ -16,7 +17,10 @@ with connect(SERVER_URL) as ws:
         "event":"join",
         "emiter_id":CLIENT_ID,
         "emiter_type":"customer",
-        "payload": { "client_name": CLIENT_NAME }
+        "payload": {
+            "client_name": CLIENT_NAME,
+            "machine_type": MACHINE_TYPE
+        }
     }))
     res = ws.recv()
     data = json.loads(res)
@@ -42,7 +46,8 @@ with connect(SERVER_URL) as ws:
         "emiter_type":"customer",
         "payload": { 
             "machine": data["payload"]["machine"],
-            "stored_id": TRANSACTION_ID
+            "stored_id": TRANSACTION_ID,
+            "machine_type": MACHINE_TYPE
         }
     }))
     res = ws.recv()

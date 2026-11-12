@@ -50,7 +50,7 @@ def handle_socket(ws:WebSocket):
         ).json()
         
         #añadir al dispatcher
-        dispatcher.queue_client(res["id"])
+        dispatcher.queue_client(res["id"],data["payload"]["machine_type"])
         
         #manejo de socket
         while True:
@@ -62,7 +62,8 @@ def handle_socket(ws:WebSocket):
                 #liberar el recurso
                 dispatcher.release_client(
                     data["payload"]["machine"],
-                    data["payload"]["stored_id"]
+                    data["payload"]["stored_id"],
+                    data["payload"]["machine_type"]
                 )
                 continue
             
