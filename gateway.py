@@ -14,6 +14,7 @@ SERVICES = {
     "maquinas": os.getenv("MACHINES_URL", "http://127.0.0.1:5004"),
     "servicios": os.getenv("SERVICES_URL", "http://127.0.0.1:5005"),
     "turnos": os.getenv("TURNS_URL", "http://127.0.0.1:5002"),
+    "tickets": os.getenv("TICKETS_URL", "http://127.0.0.1:5006")
 }
 
 def proxy_request(service_base_url, path):
@@ -82,6 +83,12 @@ def gateway_servicios(path=""):
 @token_required # Autenticación implementada
 def gateway_turnos(path=""):
     return proxy_request(SERVICES["turnos"], path)
+
+@app.route("/api/v1/tickets/", methods=["GET", "POST", "PUT", "PATCH", "DELETE"])
+@app.route("/api/v1/tickets/<path:path>", methods=["GET", "POST", "PUT", "PATCH", "DELETE"])
+@token_required # Autenticación implementada
+def gateway_tickets(path=""):
+    return proxy_request(SERVICES["tickets"], path)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
