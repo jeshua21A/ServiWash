@@ -1,12 +1,13 @@
 from flask import Blueprint, request, jsonify
 from app.services.ticket import generar_ticket
 from app.services.servicios import cotizar_servicio
+from app.database import Base
 
-tickets_bp = Blueprint(
-    'tickets_bp',
-    __name__,
-    url_prefix='/api/v1/tickets'
-)
+tickets_bp = Blueprint('tickets_bp', __name__, url_prefix='/api/v1/tickets')
+
+@tickets_bp.route('', methods=['GET'])
+def get_tickets():
+    Base
 
 
 @tickets_bp.route('', methods=['POST'])

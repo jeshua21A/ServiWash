@@ -1,4 +1,3 @@
-
 """
 Servicio encargado de generar tickets y registrar
 sus respectivos detalles en la base de datos.
@@ -51,7 +50,7 @@ def generar_ticket(data):
         for item in servicios:
 
             servicio_id = item.get('servicios_id')
-            metrica = item.get('metrica_cobro')
+            metrica = item.get('metrica_cobro', '').upper()
             datos_cotizacion = item.get('datos')
 
             if not servicio_id or not metrica or not isinstance(datos_cotizacion, dict):

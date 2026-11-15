@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, DECIMAL, TIMESTAMP, Enum, ForeignKey, fu
 from app.database import Base
 
 class Ticket(Base):
-    __tablename__ = 'Ticket'
+    __tablename__ = 'tickets'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     cobro_total = Column (DECIMAL(10,2), nullable=False) 
@@ -14,10 +14,10 @@ class Ticket(Base):
     usuarios_id = Column(Integer, nullable=False)
 
 class DetalleServicio(Base):
-    __tablename__ = 'DetallesServicio'
+    __tablename__ = 'detallesservicio'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     cantidad = Column(DECIMAL(10, 2), nullable=False, default=1.00)
     subtotal = Column(DECIMAL(10, 2), nullable=False)
     servicios_id = Column(Integer, nullable=False)
-    tickets_id = Column(Integer,  ForeignKey('Tickets.id'), nullable=False)
+    tickets_id = Column(Integer,  ForeignKey('tickets.id'), nullable=False)
