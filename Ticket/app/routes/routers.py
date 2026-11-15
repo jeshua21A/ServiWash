@@ -5,11 +5,6 @@ from app.database import Base
 
 tickets_bp = Blueprint('tickets_bp', __name__, url_prefix='/api/v1/tickets')
 
-@tickets_bp.route('', methods=['GET'])
-def get_tickets():
-    Base
-
-
 @tickets_bp.route('', methods=['POST'])
 def crear_ticket():
 
