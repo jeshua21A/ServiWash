@@ -53,6 +53,9 @@ CONURL = (
 engine = create_engine(CONURL)
 Session = sessionmaker(bind=engine)
 
+#crear en bd
+Base.metadata.create_all(bind=engine)
+
 #manejador de sesiones
 @contextmanager
 def get_session():
