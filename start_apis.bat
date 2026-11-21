@@ -1,6 +1,6 @@
 @echo off
 rem set "PY=%~dp0.api_env\Scripts\python.exe"
-set "PY=%~dp0venv\Scripts\python.exe"
+set "PY=%~dp0.venv\Scripts\python.exe"
 
 rem lanzar servicio de usuarios
 start cmd /k "cd /d %~dp0Usuarios && "%PY%" run.py"
@@ -17,6 +17,7 @@ echo servicio de servicios levantado
 rem lanzar servicio de maquinas
 start cmd /k "cd /d %~dp0Maquinas && "%PY%" run.py"
 echo servicio de maquinas levantado
+timeout /t 3 /nobreak >nul
 
 rem lanzar servicio de turnos
 start cmd /k "cd /d %~dp0Turnos && "%PY%" run.py"

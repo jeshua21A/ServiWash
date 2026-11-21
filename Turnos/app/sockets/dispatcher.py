@@ -19,10 +19,10 @@ class TurnDispatcher:
         self.repo = repo
         self.manager = manager
         self.washing_machines:List[Machine] = requests.get(
-            "http://localhost:8000/api/v1/maquinas?tipo_maquina=LAVADORA"
+            "http://127.0.0.1:5004/?tipo_maquina=LAVADORA"
         ).json()
         self.dryer_machines:List[Machine] = requests.get(
-            "http://localhost:8000/api/v1/maquinas?tipo_maquina=SECADORA"
+            "http://127.0.0.1:5004/?tipo_maquina=SECADORA"
         ).json()
         self.wash_asigns = { machine["id"]:"" for machine in self.washing_machines }
         self.dryer_asigns = { machine["id"]:"" for machine in self.dryer_machines }
