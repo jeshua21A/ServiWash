@@ -3,9 +3,9 @@ from app.services.ticket import generar_ticket
 from app.services.servicios import cotizar_servicio
 from app.database import Base
 
-tickets_bp = Blueprint('tickets_bp', __name__, url_prefix='/api/v1/tickets')
+tickets_bp = Blueprint('tickets_bp', __name__)
 
-@tickets_bp.route('', methods=['POST'])
+@tickets_bp.route('/', methods=['POST'])
 def crear_ticket():
 
     data = request.get_json(silent=True)

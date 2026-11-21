@@ -5,7 +5,7 @@ Este módulo proporciona una clase `ServiciosAPIClient` que permite interactuar 
 import requests
 from requests.exceptions import RequestException
 
-SERVICIOS_API_URL = "http://localhost:5005/api/v1/servicios"  # URL base de la API de Servicios
+SERVICIOS_API_URL = "http://localhost:5005"  # URL base de la API de Servicios
 
 def cotizar_servicio(metrica, datos):
     endpoints = {
