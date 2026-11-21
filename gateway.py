@@ -1,11 +1,13 @@
 import os
 import requests
 from flask import Flask, request, Response, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 from auth import token_required
 
 load_dotenv()
 app = Flask(__name__)
+CORS(app)
 
 # Apunta al puerto interno donde corre tu microservicio de servicios
 SERVICES = {
