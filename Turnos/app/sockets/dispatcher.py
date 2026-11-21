@@ -36,7 +36,7 @@ class TurnDispatcher:
         self.counter += 1
         
         #añadir cliente a la cola
-        queue = self.dryer_asigns if machine_type == "SECADORA" else self.wash_queue
+        queue = self.dray_queue if machine_type == "SECADORA" else self.wash_queue
         queue.append(id)
         
         #notificar al cliente
@@ -79,7 +79,7 @@ class TurnDispatcher:
             return
         
         #decidir la cola
-        queue = self.dryer_asigns if machine_type == "SECADORA" else self.wash_queue
+        queue = self.dray_queue if machine_type == "SECADORA" else self.wash_queue
             
         #validar cola (cola vacia)
         if not len(queue):
