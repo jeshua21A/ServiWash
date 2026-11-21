@@ -1,6 +1,6 @@
 import logging
 from .database import Client, get_session
-from sqlalchemy import select, update, delete
+from sqlalchemy import select, update, delete, or_
 
 #logger de repositorio
 logger = logging.getLogger(__file__)
@@ -42,7 +42,7 @@ class ClientRepository:
             #obtener la sesion
             with get_session() as session:
                 #preparar sentencia
-                stmt = select(Client).where((Client.id == id or Client.name == name))
+                stmt = select(Client).where(or_(Client.id == id, Client.name == name))
                 
                 #ejecutar sentencia
                 res = session.execute(stmt)
