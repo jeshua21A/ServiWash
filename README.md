@@ -114,7 +114,7 @@ Retorna una lista con todas las máquinas registradas en el sistema.
 
 **Método:** `GET`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - Estado (opcional): Filtra las máquinas según su estado actual.
@@ -143,7 +143,7 @@ Obtiene los detalles específicos de una máquina a partir de su identificador �
 
 **Método:** `GET`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - id: ID único de la máquina.
@@ -179,7 +179,7 @@ Registra una nueva máquina en el sistema utilizando los datos JSON provistos.
 
 **Método:** `POST`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - Ninguno
@@ -226,7 +226,7 @@ Modifica de forma parcial únicamente el estado operativo de una máquina espec�
 
 **Método:** `PATCH`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - id (Path): ID único de la máquina.
@@ -283,7 +283,7 @@ Permite cambiar el tipo de un equipo ya registrado (por ejemplo, de secadora a l
 
 **Método:** `PATCH`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - id (Path): ID único de la máquina.
@@ -340,7 +340,7 @@ Elimina permanentemente una máquina del sistema utilizando su ID.
 
 **Método:** `DELETE`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - id: ID único de la máquina a eliminar.
@@ -374,12 +374,12 @@ Retorna una lista con todos los servicios configurados en el sistema.
 
 **Método:** `GET`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - Ninguno
 
-**Endpoint:** `http://127.0.0.1:8050/api/v1/servicios`
+**Endpoint:** `http://127.0.0.1:8000/api/v1/servicios`
 
 **Request Body (JSON):**
 ```bash
@@ -416,12 +416,12 @@ Retorna la información detallada de un servicio específico según su identific
 
 **Método:** `GET`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - id: ID único de la máquina.
 
-**Endpoint:** `http://127.0.0.1:8050/api/v1/servicios/{id}`
+**Endpoint:** `http://127.0.0.1:8000/api/v1/servicios/{id}`
 
 **Request Body (JSON):**
 ```bash
@@ -451,12 +451,12 @@ Da de alta un nuevo tipo de servicio de lavandería en el sistema.
 
 **Método:** `POST`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - Ninguno
 
-**Endpoint:** `http://127.0.0.1:8050/api/v1/servicios`
+**Endpoint:** `http://127.0.0.1:8000/api/v1/servicios`
 
 **Request Body (JSON):**
 | Campo | Tipo | Requerido | Descripción |
@@ -496,13 +496,13 @@ Calcula el subtotal del servicio basándose en la cantidad de kilos procesados, 
 
 **Método:** `POST`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - cotizar (Body): Parte del cuerpo de la URL para ejecutar el endpoint. 
 - kilo (Body): Parte del cuerpo de la URL para ejecutar el endpoint.
 
-**Endpoint:** `http://127.0.0.1:8050/api/v1/servicios/cotizar/kilo`
+**Endpoint:** `http://127.0.0.1:8000/api/v1/servicios/cotizar/kilo`
 
 **Request Body (JSON):**
 | Campo | Tipo | Requerido | Descripción |
@@ -556,13 +556,13 @@ Calcula el subtotal basándose en el tiempo transcurrido entre t_inicio y t_fina
 
 **Método:** `POST`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - cotizar (Body): Parte del cuerpo de la URL para ejecutar el endpoint. 
 - uso (Body): Parte del cuerpo de la URL para ejecutar el endpoint.
 
-**Endpoint:** `http://127.0.0.1:8050/api/v1/servicios/cotizar/uso`
+**Endpoint:** `http://127.0.0.1:8000/api/v1/servicios/cotizar/uso`
 
 **Request Body (JSON):**
 | Campo | Tipo | Requerido | Descripción |
@@ -625,13 +625,13 @@ Calcula el subtotal multiplicando la cantidad de piezas o prendas especiales por
 
 **Método:** `POST`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - cotizar (Body): Parte del cuerpo de la URL para ejecutar el endpoint. 
 - prenda-especial (Body): Parte del cuerpo de la URL para ejecutar el endpoint.
 
-**Endpoint:** `http://127.0.0.1:8050/api/v1/servicios/cotizar/prenda-especial`
+**Endpoint:** `http://127.0.0.1:8000/api/v1/servicios/cotizar/prenda-especial`
 
 **Request Body (JSON):**
 | Campo | Tipo | Requerido | Descripción |
@@ -685,12 +685,12 @@ Actualiza los datos de un servicio existente utilizando su ID.
 
 **Método:** `PUT`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - id: ID único del servicio a actualizar.
 
-**Endpoint:** `http://127.0.0.1:8050/api/v1/servicios/{id}`
+**Endpoint:** `http://127.0.0.1:8000/api/v1/servicios/{id}`
 
 **Request Body (JSON):**
 | Campo | Tipo | Requerido | Descripción |
@@ -737,12 +737,12 @@ Elimina un servicio permanentemente del sistema por medio de su ID.
 
 **Método:** `DELETE`
 
-**Autenticación:** Sin aplicar todavía.
+**Autenticación:** Aplicado.
 
 **Parámetros:** 
 - id: ID único del servicio a eliminar.
 
-**Endpoint:** `http://127.0.0.1:8050/api/v1/servicios/{id}`
+**Endpoint:** `http://127.0.0.1:8000/api/v1/servicios/{id}`
 
 **Request Body (JSON):**
 ```bash
