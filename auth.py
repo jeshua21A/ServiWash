@@ -40,7 +40,7 @@ def decode_token(token:str)->dict|None:
         return payload # Retorna los datos internos del token (ej. sub, rol) si es válido
     except jwt.ExpiredSignatureError:
         # Captura el error específico cuando el token ha caducado
-        logger.warning("Intento de acceso con toekn expirado.")
+        logger.warning("Intento de acceso con token expirado.")
         return None
     except jwt.InvalidTokenError as e:
         # Captura cualquier otro error de alteración o formato inválido del token
