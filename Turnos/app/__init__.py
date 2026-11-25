@@ -1,7 +1,7 @@
 import logging
 import json
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_websockets import WebSockets, WebSocket
 import requests
@@ -106,6 +106,10 @@ def create_app()->Flask:
 
     @app.before_request
     def middleware():
+        #el endpoint de websockets esta expuesto sin token
+        if request.path == "/ws":
+            return
+        
         #validar modo
         if DEBUG:
             return

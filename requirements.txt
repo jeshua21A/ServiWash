@@ -1,6 +1,7 @@
 Flask
 flask-cors
 flask-websockets
+websockets
 sqlalchemy
 mysql-connector-python
 python-dotenv

@@ -1,13 +1,26 @@
 import os
+import contextlib
+import logging
+import threading
+from urllib.parse import urlparse
+
 import requests
 from flask import Flask, request, Response, jsonify
 from flask_cors import CORS
+from flask_websockets import WebSockets, WebSocket
+from websockets.sync.client import connect as ws_connect
 from dotenv import load_dotenv
 from auth import token_required
 
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
+
+# Configuración del logger
+logger = logging.getLogger(__name__)
+
+# Capa de websockets del gateway
+ws_server = WebSockets(app)
 
 # Apunta al puerto interno donde corre tu microservicio de servicios
 SERVICES = {
@@ -55,6 +68,65 @@ def proxy_request(service_base_url, path):
     except requests.exceptions.ConnectionError:
         # Si el microservicio interno está apagado o no responde, devuelve un error HTTP 503
         return jsonify({"error": "El microservicio de destino no está disponible o encendido"}), 503
+
+def websocket_url(service_base_url, path):
+    """
+    Convierte la URL base HTTP de un microservicio en su equivalente WebSocket.
+    Ej: http://127.0.0.1:5002 -> ws://127.0.0.1:5002/ws
+    """
+    parsed = urlparse(service_base_url)
+    scheme = "wss" if parsed.scheme == "https" else "ws"
+    return f"{scheme}://{parsed.netloc}/{path}"
+
+# RUTA WEBSOCKET DEL API GATEWAY (Proxy Reverso de sockets)
+# Endpoint expuesto SIN validación de token: el cliente se conecta a
+# ws://<gateway>/ws y el gateway retransmite los mensajes hacia y desde
+# el endpoint /ws del microservicio de turnos.
+@ws_server.route("/ws")
+def gateway_turnos_ws(client:WebSocket):
+    target_url = websocket_url(SERVICES["turnos"], "ws")
+
+    try:
+        # Abrir la conexión WebSocket contra el microservicio de turnos
+        stack = contextlib.ExitStack()
+        upstream = stack.enter_context(
+            ws_connect(target_url, proxy=None)
+        )
+    except Exception as e:
+        # Si el microservicio no está disponible, se cierra el socket del cliente
+        logger.warning(f"No se pudo conectar al websocket de turnos: {e}")
+        with contextlib.suppress(RuntimeError):
+            client.close(1011, "turnos service unavailable")
+        return
+
+    # Reenvía los mensajes del microservicio hacia el cliente del gateway
+    def pump_upstream():
+        try:
+            for message in upstream:
+                client.send(message)
+        except Exception as e:
+            logger.info(f"Websocket de turnos finalizado: {e}")
+        finally:
+            # Al cerrarse el microservicio, se cierra también el cliente del gateway
+            with contextlib.suppress(RuntimeError, OSError):
+                client.close(1000, "upstream closed")
+
+    thread = threading.Thread(target=pump_upstream, name="gateway-ws-upstream", daemon=True)
+    thread.start()
+
+    try:
+        # Reenvía los mensajes del cliente del gateway hacia el microservicio
+        for message in client.iter_data():
+            upstream.send(message)
+    except Exception as e:
+        logger.info(f"Websocket del cliente finalizado: {e}")
+    finally:
+        # Limpieza de ambas conexiones al terminar el relay
+        with contextlib.suppress(Exception):
+            stack.close()
+        with contextlib.suppress(RuntimeError, OSError):
+            client.close()
+        thread.join(timeout=5)
 
 # RUTAS DEL API GATEWAY (Puntos de entrada centralizados)
 @app.route("/api/v1/usuarios/", methods=["GET", "POST", "PUT", "PATCH", "DELETE"])

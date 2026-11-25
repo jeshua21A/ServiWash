@@ -1,6 +1,6 @@
 @echo off
 rem set "PY=%~dp0.api_env\Scripts\python.exe"
-set "PY=%~dp0.venv\Scripts\python.exe"
+set "PY=%~dp0.api_env\Scripts\python.exe"
 
 rem lanzar servicio de usuarios
 start cmd /k "cd /d %~dp0Usuarios && "%PY%" run.py"
