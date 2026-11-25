@@ -1,6 +1,6 @@
 import os
 import requests
-from flask import Flask, request, Response, jsonify
+from flask import Flask, request, Response, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 from auth import token_required
@@ -8,6 +8,9 @@ from auth import token_required
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+WEB_APP_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "Frontend", "Web_App"))
 
 # Apunta al puerto interno donde corre tu microservicio de servicios
 SERVICES = {
@@ -82,7 +85,6 @@ def gateway_servicios(path=""):
 
 @app.route("/api/v1/turnos/", methods=["GET", "POST", "PUT", "PATCH", "DELETE"])
 @app.route("/api/v1/turnos/<path:path>", methods=["GET", "POST", "PUT", "PATCH", "DELETE"])
-@token_required # Autenticación implementada
 def gateway_turnos(path=""):
     return proxy_request(SERVICES["turnos"], path)
 
@@ -91,6 +93,24 @@ def gateway_turnos(path=""):
 @token_required # Autenticación implementada
 def gateway_tickets(path=""):
     return proxy_request(SERVICES["tickets"], path)
+
+# Interfaz gráfica React + Vite en Frontend/Web_App
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def server_frontend(path):
+    if path.startswith("api/"):
+        return {"error": "Endpoint no encontrado"}, 404
+
+    if path:
+        candidate = os.path.abspath(os.path.join(WEB_APP_DIR, path))
+        if candidate.startswith(WEB_APP_DIR + os.sep) and os.path.isfile(candidate):
+            return send_from_directory(WEB_APP_DIR, path)
+
+    index_path = os.path.join(WEB_APP_DIR, "index.html")
+    if os.path.isfile(index_path):
+        return send_from_directory(WEB_APP_DIR, "index.html")
+
+    return {"error": f"No se encontro index.html en {WEB_APP_DIR}"}, 404
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
