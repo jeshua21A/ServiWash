@@ -9,13 +9,22 @@ load_dotenv() # cargar variables de entorno
 
 Base = declarative_base() # Base ORM
 
+# Parámetros de conexión a MySQL
+DB_USER = os.getenv('DB_USER', 'root')
+DB_PASSWORD = os.getenv('DB_PASSWORD', '')
+DB_HOST = os.getenv('DB_HOST', 'localhost')
+DB_PORT = os.getenv('DB_PORT', '3306')
+DB_NAME = os.getenv('DB_NAME', 'serviwash')
+
 # Configuracion de la base de datos
 DATABASE_URL = URL.create(
     drivername="mysql+mysqlconnector",
-    username=os.getenv('DB_USER'),
-    password=os.getenv('DB_PASSWORD'),
-    host=os.getenv('DB_HOST'),
-    database=os.getenv('DB_NAME')
+    username=DB_USER,
+    password=DB_PASSWORD,
+    host=DB_HOST,
+    port=int(DB_PORT),
+    database=DB_NAME,
+    query={"charset": "utf8mb4"}
 )
 
 # Crear el motor de base de datos
@@ -45,3 +54,9 @@ def get_db_session():
         raise
     finally:
         session.close() # cierre de sesión
+
+# Importar modelos
+from app import models
+
+#crear en bd
+Base.metadata.create_all(bind=engine)

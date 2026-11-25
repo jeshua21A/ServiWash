@@ -14,7 +14,7 @@ class Ticket(Base):
     usuarios_id = Column(Integer, nullable=False)
 
 class DetalleServicio(Base):
-    __tablename__ = 'detallesservicio'
+    __tablename__ = 'detalles_servicio'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     cantidad = Column(DECIMAL(10, 2), nullable=False, default=1.00)

@@ -25,7 +25,7 @@ services:
     container_name: serviwash_app
     restart: unless-stopped
     ports:
-      - "8001:8000"
+      - "8000:8000"
     environment:
       SECRET_KEY: ${SECRET_KEY}
       JWT_SECRET: ${JWT_SECRET}

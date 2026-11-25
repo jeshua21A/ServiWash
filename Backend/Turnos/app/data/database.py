@@ -42,11 +42,17 @@ class Turn(Base):
         name="clientes_id"
     )
 
+# Parámetros de conexión a MySQL
+DB_USER = os.getenv('DB_USER', 'root')
+DB_PASSWORD = os.getenv('DB_PASSWORD', '')
+DB_HOST = os.getenv('DB_HOST', 'localhost')
+DB_PORT = os.getenv('DB_PORT', '3306')
+DB_NAME = os.getenv('DB_NAME', 'serviwash')
+
 #url de conexion
 CONURL = (
-    "mysql+mysqlconnector://"
-    f"{os.environ.get("DBUSER")}:{os.environ.get("DBPASS")}"
-    f"@{os.environ.get("DBSERVER")}/{os.environ.get("DBNAME")}?charset=utf8mb4"
+    f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}"
+    f"@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
 )
 
 #motor de conexion y sesion

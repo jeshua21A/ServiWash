@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-WEB_APP_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "Frontend", "Web_App"))
+WEB_APP_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "Frontend", "Web-App"))
 
 # Apunta al puerto interno donde corre tu microservicio de servicios
 SERVICES = {
